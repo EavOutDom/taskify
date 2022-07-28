@@ -43,3 +43,48 @@
     justify-content: space-evenly;
     width: 90%;
 }
+
+.single_task {
+    display: flex;
+    width: 30%;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+    background-color: aqua;
+    animation-duration: 3s;
+    align-items: center;
+}
+
+.single_task--text {
+    flex: 1;
+    /* padding: 5px;
+    border: none;*/
+    font-size: 20px;
+}
+
+.single_task--input {
+    flex: 1;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+    outline: none;
+}
+
+.icon {
+    font-size: 20px;
+
+    margin: 0 5px;
+}
+
+@media screen and (max-width: 650px) {
+    .single_task {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .single_task {
+        width: 90%;
+    }
+}

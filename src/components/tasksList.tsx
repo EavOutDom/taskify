@@ -13,7 +13,7 @@ const TasksList: React.FC<Props> = ({ tasks, setTasks }) => {
         <div className={'task'}>
             {tasks.map((task) => {
                 return (
-                    <SingleTask key={task.id} task={task}/>
+                    <SingleTask key={task.id} task={task} tasks={tasks} setTasks={setTasks}/>
                 );
             })}
         </div>
