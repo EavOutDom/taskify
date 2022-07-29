@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { Tasks } from "../model";
 import { AiFillEdit, AiFillDelete, AiOutlineFileDone } from "react-icons/ai";
 import "./style.css";
+import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
+    index: number;
     task: Tasks;
     tasks: Tasks[];
     setTasks: React.Dispatch<React.SetStateAction<Tasks[]>>;
 }
-const SingleTask: React.FC<Props> = ({ task, tasks, setTasks }) => {
+const SingleTask: React.FC<Props> = ({ index, task, tasks, setTasks }) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [taskName, setTaskName] = useState<string>(task.name);
     const handleComplete = (id: number) => {
@@ -34,55 +36,64 @@ const SingleTask: React.FC<Props> = ({ task, tasks, setTasks }) => {
         );
         setIsEdit(false);
     };
-
     return (
-        <form
-            className={"single_task"}
-            onSubmit={(e) => handleUpdate(task.id, e)}
-        >
-            {isEdit ? (
-                <input
-                    autoFocus
-                    value={taskName}
-                    onChange={(e) => setTaskName(e.target.value)}
-                    className={"single_task--input"}
-                />
-            ) : task.completed ? (
-                <span
-                    className={"single_task--text"}
-                    style={{
-                        textDecoration: "line-through",
-                        textDecorationThickness: "2px",
-                    }}
+        <Draggable draggableId={task.id.toString()} index={index}>
+            {(provider) => (
+                <form
+                    className={"single_task"}
+                    onSubmit={(e) => handleUpdate(task.id, e)}
+                    ref={provider.innerRef}
+                    {...provider.dragHandleProps}
+                    {...provider.draggableProps}
                 >
-                    {task.name}
-                </span>
-            ) : (
-                <span className={"single_task--text"}>{task.name}</span>
-            )}
+                    {isEdit ? (
+                        <input
+                            autoFocus
+                            value={taskName}
+                            onChange={(e) => setTaskName(e.target.value)}
+                            className={"single_task--input"}
+                        />
+                    ) : task.completed ? (
+                        <span
+                            className={"single_task--text"}
+                            style={{
+                                textDecoration: "line-through",
+                                textDecorationThickness: "2px",
+                            }}
+                        >
+                            {task.name}
+                        </span>
+                    ) : (
+                        <span className={"single_task--text"}>{task.name}</span>
+                    )}
 
-            <div>
-                <span
-                    className={"icon"}
-                    onClick={() => {
-                        if (!task.completed) {
-                            setIsEdit(!isEdit);
-                        }
-                    }}
-                >
-                    <AiFillEdit />
-                </span>
-                <span className={"icon"} onClick={() => handleDelete(task.id)}>
-                    <AiFillDelete />
-                </span>
-                <span
-                    className={"icon"}
-                    onClick={() => handleComplete(task.id)}
-                >
-                    <AiOutlineFileDone />
-                </span>
-            </div>
-        </form>
+                    <div>
+                        <span
+                            className={"icon"}
+                            onClick={() => {
+                                if (!task.completed) {
+                                    setIsEdit(!isEdit);
+                                }
+                            }}
+                        >
+                            <AiFillEdit />
+                        </span>
+                        <span
+                            className={"icon"}
+                            onClick={() => handleDelete(task.id)}
+                        >
+                            <AiFillDelete />
+                        </span>
+                        <span
+                            className={"icon"}
+                            onClick={() => handleComplete(task.id)}
+                        >
+                            <AiOutlineFileDone />
+                        </span>
+                    </div>
+                </form>
+            )}
+        </Draggable>
     );
 };
 
